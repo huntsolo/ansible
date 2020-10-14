@@ -1,0 +1,22 @@
+--- 
+- name: user created
+  debug: 
+    msg="User - {{ username }} - created"
+  become: true
+- name: install {{ packages }}
+  service: 
+    name: "{{service_name}}"
+    state: restarted 
+  become: true
+- name: create service dirs
+  debug: 
+    msg="Service dirs - created"
+  become: true
+- name: service files copied
+  debug: 
+    msg="Service files - {{ filename }} - copied"
+  become: true
+- name: service start
+  debug:
+    msg: "Service - {{service_name}} - started"
+  become: true

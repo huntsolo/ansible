@@ -1,0 +1,47 @@
+---
+- name: User create
+  user:
+    name: "{{username}}"
+    shell: /sbin/nologin
+    create_home: no
+    comment: "Node exporter nologin user"
+    state: present
+  become: true
+  notify:
+    - user created
+- name: Create dirs
+  file:
+    path: "{{item.path}}"
+    state: directory
+    mode: "{{ item.mode }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    recurse: yes
+  with_items:
+    - { path: '{{ filedest[6] }}', mode: '{{ mode[6] }}'}
+  notify:
+    - create service dirs
+- name: Copy prometheus serevice files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - { src: '{{ filename[0] }}', dest: '{{ filedest[0] }}', mode: '{{ mode[0] }}'}
+    - { src: '{{ filename[1] }}', dest: '{{ filedest[1] }}', mode: '{{ mode[1] }}'}
+    - { src: '{{ filename[2] }}', dest: '{{ filedest[2] }}', mode: '{{ mode[2] }}'}
+    - { src: '{{ filename[3] }}', dest: '{{ filedest[3] }}', mode: '{{ mode[3] }}'}
+    - { src: '{{ filename[4] }}', dest: '{{ filedest[4] }}', mode: '{{ mode[4] }}'}
+    - { src: '{{ filename[5] }}', dest: '{{ filedest[5] }}', mode: '{{ mode[5] }}'}
+  notify:
+    - service files copied
+- name: service start and force systemd to reread configs
+  systemd:
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    name: "{{ service_name }}"
+  notify:
+    - service start

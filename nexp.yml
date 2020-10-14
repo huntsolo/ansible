@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - update
+    - nexp
+  vars:
+    username: 'node_exporter'
+    service_name: 'node_exporter'
+    filename:
+      bin: 'node_exporter'
+      daemon: 'node_exporter.service'
+    filedest:
+      bin: '/usr/local/bin/node_exporter'
+      daemon: "/etc/systemd/system/"

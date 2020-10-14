@@ -1,0 +1,8 @@
+--- 
+- name: locale fixed
+  debug: 
+    msg="Locale - fixed"
+  become: true
+- name: install {{s_packages}}
+  debug:
+    msg="{{s_packages}} installed"

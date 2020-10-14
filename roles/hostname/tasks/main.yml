@@ -1,0 +1,10 @@
+- name: Set a hostname
+  hostname:
+    name: "{{ hostname }}"
+- name: hosts file fix
+  blockinfile:
+    path: /etc/hosts
+    state: present
+    marker: "# {mark} ANSIBLE MANAGED BLOCK "
+    block: |
+      {{ ansible_default_ipv4.address }} {{ansible_nodename}} {{ansible_hostname}}

@@ -1,0 +1,18 @@
+---
+- name: import the "{{ s_packages }}" apt key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+  become: true
+- name: install "{{ s_packages }}" deb repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/debian buster stable
+    state: present
+  become: true
+- name: install "{{ s_packages }}"
+  apt: name="{{ s_packages }}" state=latest
+  notify:
+    - install {{ s_packages }}
+- name: install "{{ pip_packages }}"
+  pip:
+    name: "{{ pip_packages }}"

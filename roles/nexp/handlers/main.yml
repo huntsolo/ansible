@@ -1,0 +1,17 @@
+--- 
+- name: bin files copied
+  debug: 
+    msg="Bin files - {{ filename.bin }} - copied"
+  become: true
+- name: daemon files copied
+  debug: 
+    msg="Daemon files - {{ filename.daemon }} - copied"
+  become: true
+- name: user created
+  debug: 
+    msg="User - {{ username }} - created"
+  become: true
+- name: service start
+  debug:
+    msg: "Service - {{service_name}} - started"
+  become: true

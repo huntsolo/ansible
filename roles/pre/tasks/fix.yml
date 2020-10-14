@@ -1,0 +1,18 @@
+- name: Get user list
+  shell: >
+    grep /bin/bash /etc/passwd | awk -F":" '{print$1}'
+  register: user_list
+- name: Locale fix
+  blockinfile:
+    path: /home/{{ item }}/.profile
+    state: present
+    marker: "# {mark} ANSIBLE MANAGED BLOCK "
+    block: |
+      export LANGUAGE=en_US.UTF-8
+      export LANG=en_US.UTF-8
+      export LC_ALL=en_US.UTF-8
+  when:
+    - (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_version'] == "10")
+    - item != 'root'
+  loop: "{{ user_list.stdout_lines }}"
+  notify: locale fixed

@@ -1,0 +1,32 @@
+---
+- name: User create
+  user:
+    name: "{{username}}"
+    shell: /sbin/nologin
+    create_home: no
+    comment: "Blackbox exporter nologin user"
+    state: present
+  become: true
+  notify:
+    - user created
+- name: Copy blackbox_exporter serevice files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - { src: '{{ filename[0] }}', dest: '{{ filedest[0] }}', mode: '{{ mode[0] }}'}
+    - { src: '{{ filename[1] }}', dest: '{{ filedest[1] }}', mode: '{{ mode[1] }}'}
+    - { src: '{{ filename[2] }}', dest: '{{ filedest[2] }}', mode: '{{ mode[2] }}'}
+  notify:
+    - service files copied
+- name: service start and force systemd to reread configs
+  systemd:
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    name: "{{ service_name }}"
+  notify:
+    - service start

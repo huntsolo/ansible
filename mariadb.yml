@@ -1,0 +1,13 @@
+---
+- hosts: service
+  become: true
+  roles:
+    - update
+    - mariadb
+  vars:
+    service_name: 'mysql'
+    packages: 'mariadb-server'
+    filename:
+      - galera.cnf
+    filedest:
+      - /etc/mysql/conf.d/

@@ -1,0 +1,33 @@
+---
+- hosts: prometheus
+  become: true
+  roles:
+    - update
+    - prometheus
+  vars:
+    username: 'prometheus'
+    service_name: 'prometheus'
+    filename:
+      - 'prometheus'
+      - 'promtool'
+      - 'prometheus.service'
+      - 'console_libraries'
+      - 'consoles'
+      - 'prometheus.yml'
+      - ''
+    filedest:
+      - '/usr/local/bin/prometheus'
+      - '/usr/local/bin/promtool'
+      - '/etc/systemd/system/'
+      - '/etc/prometheus/'
+      - '/etc/prometheus/'
+      - '/etc/prometheus/'
+      - '/var/lib/prometheus'
+    mode:
+      - 'a+x'
+      - 'a+x'
+      - '0644'
+      - '6770'
+      - '6770'
+      - '0644'
+      - '0755'

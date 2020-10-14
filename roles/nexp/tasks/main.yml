@@ -1,0 +1,37 @@
+---
+- name: User create
+  user:
+    name: "{{username}}"
+    shell: /sbin/nologin
+    create_home: no
+    comment: "Node exporter nologin user"
+    state: present
+  become: true
+  notify:
+    - user created
+- name: Copy node exporter bin file
+  copy:
+    src: "{{ filename.bin }}"
+    dest: "{{ filedest.bin }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 'a+x'
+  notify:
+    - bin files copied
+- name: Copy node exporter system.unit file
+  copy:
+    src: "{{ filename.daemon }}"
+    dest: "{{ filedest.daemon }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  notify:
+    - daemon files copied
+- name: service start and force systemd to reread configs
+  systemd:
+    state: started
+    daemon_reload: yes
+    enabled: yes
+    name: "{{ service_name }}"
+  notify:
+    - service start

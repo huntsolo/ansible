@@ -1,0 +1,32 @@
+---
+- name: Create a data container
+  community.general.docker_container:
+    name: db
+    image: linuxserver/mariadb
+    state: started
+    restart: yes
+    hostname: mariadb_node
+    recreate: yes
+    published_ports:
+      - "3306:3306"
+      - "4567:4567"
+      - "4568:4568"
+      - "4444:4444"
+      - "4567/udp:4567/udp"
+#    volumes:
+#      - /opt//mariadb:/config
+- name: Pause while mysql start
+  pause:
+    seconds: 20
+- name: empty pass change
+  community.mysql.mysql_query:
+    login_user: root
+    query: set password = password("{{ db_password }}")
+- name: Copy service files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: '{{ filename[0] }}', dest: '{{ filedest[0] }}'}
+  notify:
+    - service files copied

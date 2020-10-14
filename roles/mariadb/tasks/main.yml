@@ -1,0 +1,15 @@
+---
+- name: install "{{ packages }}"
+  apt: name="{{ packages }}" state=latest
+#  notify:
+#    - install {{ packages }}
+- name: Copy {{ packages }} service files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: '{{ filename[0] }}', dest: '{{ filedest[0] }}'}
+  notify:
+    - service files copied
+- name: Execute the command in remote shell
+  shell: galera_new_cluster

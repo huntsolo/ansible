@@ -1,0 +1,49 @@
+---
+- name: User create
+  user:
+    name: "{{username}}"
+    shell: /sbin/nologin
+    create_home: no
+    comment: "Node exporter nologin user"
+    state: present
+  become: true
+  notify:
+    - user created
+- name: Copy prometheus  bin file
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 'a+x'
+  with_items:
+    - { src: '{{ filename.bin[0] }}', dest: '{{ filedest.bin[0] }}' }
+    - { src: '{{ filename.bin[1] }}', dest: '{{ filedest.bin[1] }}' }
+  notify:
+    - bin files copied
+- name: Copy prometheus system.unit file
+  copy:
+    src: "{{ filename.daemon }}"
+    dest: "{{ filedest.daemon }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  notify:
+    - daemon files copied
+- name: Copy prometheus libraries
+  copy:
+    src: "{{ item }}"
+    dest: "{{ libdest }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+  with_items: "{{ libdir }}"
+  
+#- name: service start and force systemd to reread configs
+#  systemd:
+#    state: started
+#    daemon_reload: yes
+#    enabled: yes
+#    name: "{{ service_name }}"
+#  notify:
+#    - service start

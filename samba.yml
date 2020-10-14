@@ -1,0 +1,8 @@
+---
+- hosts: samba
+  become: true
+  roles:
+    - update
+    - samba
+  vars:
+    - packages: [samba]

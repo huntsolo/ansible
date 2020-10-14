@@ -1,0 +1,4 @@
+---
+username: grafana
+service_name: grafana-server
+packages: grafana

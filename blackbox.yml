@@ -1,0 +1,21 @@
+---
+- hosts: blackbox
+  become: true
+  roles:
+    - update
+    - blackbox
+  vars:
+    username: 'blackbox_exporter'
+    service_name: 'blackbox_exporter'
+    filename:
+      - 'blackbox_exporter'
+      - 'blackbox_exporter.service'
+      - 'blackbox.yml'
+    filedest:
+      - '/usr/local/bin/'
+      - '/etc/systemd/system/'
+      - '/etc/blackbox_exporter/'
+    mode:
+      - 'a+x'
+      - '0644'
+      - '6770'

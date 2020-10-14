@@ -1,0 +1,13 @@
+---
+- hosts: service
+  become: true
+  roles:
+    - update
+    - mariadb_d
+  vars:
+    db_password: 'password'
+    service_name: 'mysql'
+    filename:
+      - galera0.cnf
+    filedest:
+      - /opt/mariadb

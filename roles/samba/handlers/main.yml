@@ -1,0 +1,13 @@
+--- 
+- name: Install {{ packages }}
+  service: 
+    name: smbd
+    state: restarted 
+  become: true
+- name: Copy config files
+  debug: 
+    msg="Config files copied"
+  become: true
+- name: Create share dirs
+  debug: msg="Share dirs created"
+  become: true

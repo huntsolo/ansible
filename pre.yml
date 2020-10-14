@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - update
+    - pre
+  vars:
+    - yum_packages: ['wget','net-tools','mc','curl','gnupg2','atop','yum-utils']
+    - s_packages: ['docker-compose','python3-pip']
+    - apt_packages: ['wget','net-tools','mc','curl','gnupg2','software-properties-common','atop','docker.io']
+    - pip_packages: ['pymysql']
+#    - s_packages: ['docker-ce','docker-compose','python3-pip']
+#    - apt_packages: ['wget','net-tools','mc','curl','gnupg2','software-properties-common','atop']

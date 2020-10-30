@@ -5,4 +5,4 @@
 #    - update
     - hostname
   vars:
-    hostname: 'service-node1.agro.local'
+    hostname: 'balancer0.agro.local'

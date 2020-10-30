@@ -1,7 +1,7 @@
 ---
 - include: fix.yml
 - include: docker.yml
-  when: "'service' in group_names"
+#  when: "'service' in group_names"
 - name: Install APT packages
   apt: name={{ apt_packages }} state=latest
   when: ansible_os_family == "Debian"
